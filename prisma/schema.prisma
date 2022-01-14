@@ -12,25 +12,40 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  email     String
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  email     String     @unique
   password  String
+  Playlist  Playlist[]
 }
 
 model Artist {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Song      Song[]
+  songs     Song[]
+  name      String   @unique
 }
 
 model Song {
+  id        Int        @id @default(autoincrement())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  name      String
+  artist    Artist     @relation(fields: [artistId], references: [id])
+  artistId  Int
+  playlists Playlist[]
+  duration  Int
+  url       String
+}
+
+model Playlist {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   name      String
-  artist    Artist   @relation(fields: [artistId], references: [id])
-  artistId  Int
+  songs     Song[]
+  user      User?    @relation(fields: [userId], references: [id])
+  userId    Int
 }
