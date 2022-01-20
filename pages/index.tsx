@@ -6,10 +6,13 @@ import prisma from "../lib/prisma"
 import { artistsData } from '../prisma/songsData'
 import { Text, Box, Flex } from '@chakra-ui/layout'
 import { Image } from '@chakra-ui/react'
+import { useMe } from '../lib/hooks'
 
 const Home = ({artists}) => {
+  const {user} = useMe() ;
   return (
-    <GradientLayout color="purple" subtitle="profile" title ="Yash Mittal" description ="15 public playlists" roundImage
+    <GradientLayout color="purple" subtitle="profile" title = {`${user?.firstName} ${user?.lastName}`} 
+    description ={`${user?.playlistsCount}  public playlists`} roundImage
     image={"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSyzEWAgI0lRb2AKHZ6noIb6iMoAKYYO2-0xjyxtWVxKBh0SiCXc_wrustmY11CYC3RTSU&usqp=CAU"}>
       <Box color = "white" paddingX ="40px">
         <Box marginBottom = "40px">
