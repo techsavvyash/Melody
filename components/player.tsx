@@ -28,14 +28,17 @@ import { formatTime } from "../lib/formatter"
 const Player = ({songs, activeSong}) => {
     
     const [playing, setPLaying] = useState(true)
-    const [index, setIndex] = useState(0)
+    const [index, setIndex] = useState(
+        songs.findIndex((s) => s.id === activeSong.id)
+    )
     const [seek, setSeek] = useState(0.0)
     const [isSeeking, setIsSeeking] = useState(false)
     const [repeat, setRepeat] = useState(false)
     const [shuffle, setShuffle] = useState(false)
     const [duration, setDuration] = useState(0.0)
     const soundRef = useRef(null)
-
+    const repeatRef = useRef(repeat) //a reference does not fall pray to closures
+    const setActiveSong = useStoreActions((state: any) => state.changeActiveSong)
     //learn about requestAnimationFrame
     //mostly everytime we use requestAnimationFrame its going to be recursive
     useEffect(() => {
@@ -53,6 +56,14 @@ const Player = ({songs, activeSong}) => {
 
         cancelAnimationFrame(timerId)
     }, [playing, isSeeking])
+
+    useEffect(() => {
+        setActiveSong(songs[index])
+    }, [index, setActiveSong, songs])
+
+    useEffect(() => {
+        repeatRef.current = repeat
+    }, [repeat])
 
     const setPlayState = (value) => {
         setPLaying(value) 
@@ -89,7 +100,7 @@ const Player = ({songs, activeSong}) => {
     }
 
     const onEnd = () => {
-        if(repeat) {
+        if(repeatRef) {
             setSeek(0) //for UI
             soundRef.current.seek(0) // make the song go back to start
         } else {
@@ -190,7 +201,7 @@ const Player = ({songs, activeSong}) => {
                             aria-label={['min', 'max']}
                             steps={0.1}
                             min={0}
-                            max= {duration ? duration.toFixed(2):  0}
+                            max= {duration ? (duration.toFixed(2) as unknown as number) :  0}
                             onChange = {onSeek}
                             value={[seek]}
                             onChangeStart={() => setIsSeeking(true)}
