@@ -1,6 +1,8 @@
 import {ChakraProvider, extendTheme} from "@chakra-ui/react";
 import "reset-css" ;
 import PlayerLayout from "../components/playerLayout";
+import { StoreProvider } from "easy-peasy";
+import { store } from "../lib/store";
 
 const theme = extendTheme({
   colors: {
@@ -33,6 +35,7 @@ const theme = extendTheme({
 function MyApp({ Component, pageProps }) {
   return (
   <ChakraProvider theme={theme} >
+    <StoreProvider store = {store} >
     {Component.authPage ? (
       <Component {...pageProps} />
     ) : (
@@ -40,6 +43,7 @@ function MyApp({ Component, pageProps }) {
         <Component {...pageProps} />
       </PlayerLayout>
     )}
+    </StoreProvider>
   </ChakraProvider>
   )
 }
