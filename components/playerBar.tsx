@@ -11,12 +11,13 @@ const PlayerBar = () => {
             <Flex align ="center">
                 {activeSong ? (
                     <Box padding="20px" color="white" width="30%">  
-                        <Text fontSize ="large"> SOng name</Text>
-                        <Text fonstSize="sm"> Artist name</Text>
+                        <Text fontSize ="large"> {activeSong.name} </Text>
+                        <Text fonstSize="sm"> {activeSong.artist.name} </Text>
                     </Box>
                 ) : null}
                 <Box width="40%">
-                    <Player songs={songs} activeSong ={activeSong} />
+                    
+                    {activeSong ? <Player songs={songs} activeSong ={activeSong} /> : null }
                 </Box>
             </Flex>
         </Box>
